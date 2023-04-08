@@ -1,0 +1,52 @@
+from django.db import models
+from user.models import CustomUser, Company, Candidate
+
+class Jobs(models.Model):
+    industry_selections = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
+                  ('IT & Telecommunication', 'IT & Telecommunication'), 
+                  ('Teaching/ Education', 'Teaching/ Education'),
+                  ('NGO/ INGO', 'NGO/ INGO'), 
+                  ('Graphics/ Designing', 'Graphics/ Designing'),
+                  ('Hospitality', 'Hospitality'), 
+                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
+                  ('Legal Services', 'Legal Services'),
+                  ('Other', 'Other')]
+    
+    status_selections = [('On-Site', 'On-Site'),
+                    ('Remote', 'On-Site'),
+                    ('Hybrid', 'Hybrid')]
+
+    title = models.CharField(max_length=250, null=False, blank=False)
+    address = models.CharField(max_length=50, null=False,blank=False)
+    industry = models.CharField('Industry', max_length=200,    
+            choices=industry_selections, null=False, default='Other')
+    job_type = models.CharField('Status', max_length=200,   
+            choices=status_selections, default='On-Site', null=False)
+    salary = models.CharField(max_length=20, default='Negotiable', null=False)
+    level = models.CharField(max_length=15, null=False, blank=False, default='Junior')
+    status = models.BooleanField(default=True)
+    company_id = models.ForeignKey(to=Company, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+    
+
+
+class JobRoles(models.Model):
+    job_id = models.ForeignKey(to=Jobs, on_delete=models.CASCADE)
+    roles = models.CharField(max_length=1500, null=False, blank=False)
+
+
+class JobRequirements(models.Model):
+   job_id = models.ForeignKey(to=Jobs, on_delete=models.CASCADE)
+   requirements = models.CharField(max_length=1500, null=False, blank=False)
+
+class Bookmarks(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
+    job = models.ForeignKey(to=Jobs, on_delete=models.CASCADE)
+
+class JobApplication(models.Model):
+    candidate = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
+    job = models.ForeignKey(to=Jobs, on_delete=models.CASCADE)
+    # cv = models.FileField(upload_to=)
+

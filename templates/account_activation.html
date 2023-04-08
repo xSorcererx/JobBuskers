@@ -1,0 +1,10 @@
+{% block content %}
+    Hi {{ user.name }},
+    Please verify your email by clicking on this link below.
+    {{ protocal}}://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+    If you did not send the reset request then ignore this mail.
+
+    Thank you.
+    Job Buskers.
+{% endblock content %}
