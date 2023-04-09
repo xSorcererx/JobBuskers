@@ -48,5 +48,8 @@ class Bookmarks(models.Model):
 class JobApplication(models.Model):
     candidate = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
     job = models.ForeignKey(to=Jobs, on_delete=models.CASCADE)
-    # cv = models.FileField(upload_to=)
+    cover_letter = models.CharField(max_length=200, blank=True, null=True)
+    applicant_name = models.CharField(max_length=20, blank=False, null=False)
+    email = models.EmailField(null=False, blank=False)
+    cv = models.FileField(upload_to='files', null=True, blank=True)
 

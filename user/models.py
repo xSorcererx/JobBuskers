@@ -9,7 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # custom user.
 class CustomUser (AbstractBaseUser, PermissionsMixin):
-    display_picture = models.ImageField(upload_to='images', help_text='Display picture containing a person or a logo.', null=True, blank=True)  
+    display_picture = models.ImageField(upload_to='images/user', help_text='Display picture containing a person or a logo.', null=True, blank=True)  
     name = models.CharField(max_length=20, null=False)    
     phone = PhoneNumberField(null=True, blank=True, unique=True)
     email = models.EmailField(_('email_address'), unique=True, max_length=200)
@@ -53,11 +53,23 @@ class CustomUser (AbstractBaseUser, PermissionsMixin):
 # candidate table
 class Candidate(models.Model):
     # Gender Selections
-    selections = [('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')]
+    gender_selection = [('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')]
+
+    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
+                  ('IT & Telecommunication', 'IT & Telecommunication'), 
+                  ('Teaching/ Education', 'Teaching/ Education'),
+                  ('NGO/ INGO', 'NGO/ INGO'), 
+                  ('Graphics/ Designing', 'Graphics/ Designing'),
+                  ('Hospitality', 'Hospitality'), 
+                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
+                  ('Legal Services', 'Legal Services'),
+                  ('Other', 'Other')]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    gender = models.CharField('Gender', max_length=10, 
-            choices=selections, default='Male', null=False)
+    gender = models.CharField('Gender', max_length=8, 
+            choices=gender_selection, default='Male', null=False)
+    preference = models.CharField('Preference', max_length=200, 
+            choices=pref_selection, default='Other', null=False)
 
     def __str__(self):
         return self.user.name
@@ -79,6 +91,8 @@ class Company(models.Model):
             choices=selections, null=False, default='Other')
     website = models.CharField(max_length=20, null=True, blank=True)    
     est_year = models.PositiveSmallIntegerField(null=True, blank=True)
+    banner_image = models.ImageField(upload_to='images/user/company', help_text='Job Banner', null=True, blank=True)
+    
     
     
     def __str__(self):

@@ -93,9 +93,7 @@ class UserRegistration(APIView):
            elif CustomUser.objects.filter(phone=phone).exists():
                 return Response({'message': 'Phone number already taken.'}, status=status.HTTP_400_BAD_REQUEST)
            else:
-                print('2')
                 if user_type == '2':
-                    print('cs')
                     CustomUser.objects.create_user(
                         email=email,
                         password=request.data['password'],
@@ -107,11 +105,11 @@ class UserRegistration(APIView):
                     id = CustomUser.objects.latest('id')
                     Company.objects.create(
                         user=id,
-                        industry=request.data['industry']
+                        industry=request.data['industry'],
+                        banner_image = request.data['banner_image']
                     )
 
                 elif user_type=='3':
-                    print('cs')
                     CustomUser.objects.create_user(
                         email = email,
                         password = request.data['password'],
@@ -123,8 +121,9 @@ class UserRegistration(APIView):
                     id = CustomUser.objects.latest('id')
                     Candidate.objects.create(
                         user=id,
-                        gender=request.data['gender']
-                    )               
+                        gender=request.data['gender'],
+                        preference = request.data['preference']
+                    )            
                 
                 return Response({'message': 'User Registration successful.'}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -231,12 +230,9 @@ class UpdateDetails(APIView):
 
             
             user_detail.save()
-            return Response({"message": "User detail(s) updated!", }, status=status.HTTP_200_OK, )
+            return Response({"message": "User detail(s) updated!", }, status=status.HTTP_200_OK,)
         except:
-            return Response({
-                "message": "Error!",
-            },
-                status=status.HTTP_400_BAD_REQUEST, )
+            return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST,)
 
     # def get(self, request, *args, **kwargs):
     #     userData = CustomUser.objects.get(email=request.user)

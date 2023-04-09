@@ -15,7 +15,7 @@ class CompanySerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only = True)
     class Meta:
         model = Company
-        fields = ['id', 'user', 'industry', 'website', 'est_year']
+        fields = '__all__'
 
 class CandidateSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only = True)

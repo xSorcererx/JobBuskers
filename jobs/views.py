@@ -7,12 +7,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from user.models import Company, CustomUser
 
-from .models import Bookmarks, Jobs, JobRoles, JobRequirements
+from .models import Bookmarks, Jobs, JobRoles, JobRequirements, JobApplication
 
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.decorators import method_decorator
 
-from .serializers import BookmarkSerializer, CompanyJobSerializer, JobPageSerializer, JobsSerializer, RequirementSerializer, RoleSerializer
+from .serializers import ApplicationSerializer, BookmarkSerializer, CompanyJobSerializer, JobPageSerializer, JobsSerializer, RequirementSerializer, RoleSerializer
 
 # @login_required
 class AddJobs(APIView):
@@ -87,7 +87,7 @@ class GetJob(APIView):
             return Response({'message': 'Jobs not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class Booking(APIView):
+class Bookmark(APIView):
     def get(self, request):
         try:
             bookmark_user = Bookmarks.objects.filter(user=request.query_params.get('user'))
@@ -98,13 +98,11 @@ class Booking(APIView):
             print(e)
             return Response({'message': 'Bookmarks not found'}, status=status.HTTP_404_NOT_FOUND)
     
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         try:
             user = CustomUser.objects.get(id = request.query_params.get('user'))
-            job = Jobs.objects.get(job = request.query_params.get('job'))
-            # testing correct object
-            print(user)
-            print(job)
+            job = Jobs.objects.get(job = request.data['job_id'])
+            
             Bookmarks.objects.create(
                 user_id = user.id,
                 job_id = job.id
@@ -194,3 +192,50 @@ class GetRoles(APIView):
         except Exception as e:
             print(e)
             return Response({'message': 'Role not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CandidateApplication(APIView):
+    def get(self, request):
+        try:
+            apply = JobApplication.objects.get(candidate = request.query_params.get('user'))
+            serializer = ApplicationSerializer(apply, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)        
+        except Exception as e:
+            print(e)
+            return Response({'message': 'Application could not be posted'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    def post(self, request, *args, **kwargs):    
+        try:
+            job = Jobs.objects.get(id = request.query_params.get('job'))
+            candidate = CustomUser.objects.get(id = request.data['user_id'])
+            # testing correct object
+            print(job)
+            JobApplication.objects.create(
+                applicant_name = request.data['applicant_name'],
+                email = request.data['email'],
+                cv = request.data['cv'],
+                job_id = job.id,
+                candidate_id = candidate.id
+            )
+            application =  JobApplication.objects.latest('id')
+            serializer = ApplicationSerializer(application, many=False)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({'message': 'Application could not be posted'}, status=status.HTTP_404_NOT_FOUND)
+        
+class CompanyApplication(APIView):
+    def get(self, request):
+        try:
+            company = Company.objects.get(id=request.query_params.get('company_id'))
+            job = Jobs.objects.filter(company_id= company.id)
+            apply = JobApplication.objects.filter(job = job.id)
+            serializer = ApplicationSerializer(apply, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)        
+        except Exception as e:
+            print(e)
+            return Response({'message': 'Applicaion(s) not found.'}, status=status.HTTP_404_NOT_FOUND)

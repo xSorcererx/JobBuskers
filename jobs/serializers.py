@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Jobs, JobRoles, JobRequirements, Bookmarks
+from .models import Jobs, JobRoles, JobRequirements, Bookmarks, JobApplication
 from user.serializers   import CompanySerializer
 
 class JobsSerializer(serializers.ModelSerializer):
@@ -17,9 +17,6 @@ class CompanyJobSerializer(serializers.ModelSerializer):
      class Meta:
         model = Jobs
         fields = ['id', 'title', 'company_id', 'job_type', 'level', ]
-
-
-
 class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobRequirements
@@ -41,3 +38,8 @@ class RoleSerializer(serializers.ModelSerializer):
      class Meta:
         model = JobRoles
         fields = ['roles', 'id', 'job_id']
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobApplication
+        fields = '__all__'
