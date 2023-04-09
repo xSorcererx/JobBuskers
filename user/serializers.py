@@ -25,10 +25,10 @@ class CandidateSerializer(serializers.ModelSerializer):
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Education
+        model = Education
         fields = '__all__'
 
 class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Experience
+        model = Experience
         fields = '__all__'

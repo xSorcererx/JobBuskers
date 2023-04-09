@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import UserRegistration, UserLogin, GetCompany, UpdateDetails, GetCandidate, UserActivation, Activation, Education, SubEducation, Experience, SubExperience
+from .views import UserRegistration, UserLogin, GetCompany, UpdateDetails, GetCandidate, UserActivation, Activation, EducationView, SubEducation, ExperienceView, SubExperience
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -20,8 +20,8 @@ urlpatterns = [
     path('candidate/', GetCandidate.as_view(), name='candidate'),
     path('edit-user/', UpdateDetails.as_view(), name='edit-user'),
 
-    path('education/', Education.as_view(), name='education'),
+    path('education/', EducationView.as_view(), name='education'),
     path('education-update/', SubEducation.as_view(), name='education'),
-    path('experience/', Experience.as_view(), name='education'),
+    path('experience/', ExperienceView.as_view(), name='education'),
     path('exp-update/', SubExperience.as_view(), name='education'),
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login, logout
 
-from .serializers import LoginSerializer, UserSerializer, CompanySerializer, CandidateSerializer
+from .serializers import ExperienceSerializer, LoginSerializer, UserSerializer, CompanySerializer, CandidateSerializer, EducationSerializer
 
 # rest framework
 from rest_framework.response import Response
@@ -24,8 +24,6 @@ from django.template.loader import render_to_string
 
 def tokenGenerator(user):
     return RefreshToken.for_user(user)
-
-
 class Activation(APIView):
     def post(request, uidb64, token):
         User = get_user_model()
@@ -263,14 +261,14 @@ class GetCandidate (APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
-            return Response({'message': 'Company not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
         
 
-class Education (APIView):
+class EducationView (APIView):
     def get(self, request):
         try:
-            education = Education.objects.filter(candidate= request.query_params.get('user'))
-            serializer = CandidateSerializer(education, many=True)
+            education = Education.objects.filter(candidate= request.query_params.get('user'))            
+            serializer = EducationSerializer(education, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)            
         except Exception as e:
@@ -290,7 +288,7 @@ class Education (APIView):
                 candidate_id = candidate.id
             )
             education =  Education.objects.latest('id')
-            serializer = CandidateSerializer(education, many=False)
+            serializer = EducationSerializer(education, many=False)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -320,20 +318,26 @@ class SubEducation (APIView):
         except:
             return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
         
-    # def delete(self, request):
-    #     try:
-    #         education = Education.objects.get(id = request.query_params.get('id'))
+
+    def delete(self, request):
+        try:
+            education = Education.objects.get(id = request.query_params.get('id'))
+            education.delete()
+            return Response({"message": "Education Deleted!", }, status=status.HTTP_200_OK, )
+        except:
+            return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
+
             
         
 
 
         
 
-class Experience (APIView):
+class ExperienceView (APIView):
     def get(self, request):
         try:
             exp = Experience.objects.filter(candidate= request.query_params.get('user'))
-            serializer = CandidateSerializer(exp, many=True)
+            serializer = ExperienceSerializer(exp, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)            
         except Exception as e:
@@ -354,8 +358,8 @@ class Experience (APIView):
                 description = request.data['description'],
                 candidate_id = candidate.id
             )
-            exp =  Education.objects.latest('id')
-            serializer = CandidateSerializer(exp, many=False)
+            exp =  Experience.objects.latest('id')
+            serializer = ExperienceSerializer(exp, many=False)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -387,5 +391,14 @@ class SubExperience(APIView):
             
             experience.save()
             return Response({"message": "experience updated!", }, status=status.HTTP_200_OK, )
+        except:
+            return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
+        
+        
+    def delete(self, request):
+        try:
+            exp = Experience.objects.get(id = request.query_params.get('id'))
+            exp.delete()
+            return Response({"message": "Experience Deleted!", }, status=status.HTTP_200_OK, )
         except:
             return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
