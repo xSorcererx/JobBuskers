@@ -101,12 +101,17 @@ class Bookmark(APIView):
     def post(self, request, *args, **kwargs):
         try:
             user = CustomUser.objects.get(id = request.query_params.get('user'))
-            job = Jobs.objects.get(job = request.data['job_id'])
-            
+            job = Jobs.objects.get(id = request.data['job_id'])
+            print(user)
+            print(job)
             Bookmarks.objects.create(
                 user_id = user.id,
                 job_id = job.id
             )
+            bookmark = Bookmarks.object.latest('id')
+            serializer = BookmarkSerializer(bookmark, many=False)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)            
         except Exception as e:
             print(e)
             return Response({'message': 'Bookmark could not be created'}, status=status.HTTP_404_NOT_FOUND)
@@ -115,6 +120,7 @@ class Bookmark(APIView):
         try:
             bookmark = Bookmarks.objects.get(id=request.query_params.get('id'))
             bookmark.delete()
+
             return Response({'message': 'Bookmark deleted'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
