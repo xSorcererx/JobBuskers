@@ -212,6 +212,7 @@ class CandidateApplication(APIView):
             return Response({'message': 'No Applications'}, status=status.HTTP_404_NOT_FOUND)
     
 
+class ApplyJob(APIView):
     def post(self, request, *args, **kwargs):    
         try:
             candidate = CustomUser.objects.get(id = request.query_params.get('user'))
