@@ -203,7 +203,7 @@ class GetRoles(APIView):
 class CandidateApplication(APIView):
     def get(self, request):
         try:
-            apply = JobApplication.objects.get(candidate = request.query_params.get('user'))
+            apply = JobApplication.objects.filter(candidate = request.query_params.get('user'))
             serializer = ApplicationSerializer(apply, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)  
@@ -214,10 +214,11 @@ class CandidateApplication(APIView):
 
     def post(self, request, *args, **kwargs):    
         try:
-            candidate = CustomUser.objects.get(id = request.query_params.get('user_id'))
+            candidate = CustomUser.objects.get(id = request.query_params.get('user'))
             job = Jobs.objects.get(id = request.data['job'])
             # testing correct object
             print(job)
+            print(candidate)
             JobApplication.objects.create(
                 applicant_name = request.data['applicant_name'],
                 email = request.data['email'],
@@ -236,8 +237,7 @@ class CandidateApplication(APIView):
 class CompanyApplication(APIView):
     def get(self, request):
         try:
-            company = Company.objects.get(id=request.query_params.get('company_id'))
-            job = Jobs.objects.filter(company_id= company.id)
+            job = Jobs.objects.get(id = request.query_params.get('job'))
             apply = JobApplication.objects.filter(job = job.id)
             serializer = ApplicationSerializer(apply, many=True)
 
