@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AddJobs, JobRole, JobReqs, GetJob, CompanyJob, JobPage, GetRoles, GetRequirements, Bookmark
+from .views import AddJobs, JobRole, JobReqs, GetJob, CompanyJob, JobPage, GetRoles, GetRequirements, Bookmark, CandidateApplication, CompanyApplication
 
 urlpatterns = [
     path('add_job/<int:pk>/', AddJobs.as_view(), name='add_job'),
@@ -15,5 +15,9 @@ urlpatterns = [
     path('job_reqs/<int:pk>/', JobReqs.as_view(), name='job_reqs'),
 
     path('bookmarks/', Bookmark.as_view(), name='bookmarks'),
+    
+    
+    path('apply/', CandidateApplication.as_view(), name='apply'),
+    path('view_job_applications/', CompanyApplication.as_view(), name='company-application-history'),
 
 ]

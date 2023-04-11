@@ -110,7 +110,7 @@ class Bookmark(APIView):
             )
             bookmark = Bookmarks.object.latest('id')
             serializer = BookmarkSerializer(bookmark, many=False)
-            
+
             return Response(serializer.data, status=status.HTTP_200_OK)            
         except Exception as e:
             print(e)
@@ -206,16 +206,16 @@ class CandidateApplication(APIView):
             apply = JobApplication.objects.get(candidate = request.query_params.get('user'))
             serializer = ApplicationSerializer(apply, many=True)
 
-            return Response(serializer.data, status=status.HTTP_200_OK)        
+            return Response(serializer.data, status=status.HTTP_200_OK)  
         except Exception as e:
             print(e)
-            return Response({'message': 'Application could not be posted'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'No Applications'}, status=status.HTTP_404_NOT_FOUND)
     
 
     def post(self, request, *args, **kwargs):    
         try:
-            job = Jobs.objects.get(id = request.query_params.get('job'))
-            candidate = CustomUser.objects.get(id = request.data['user_id'])
+            candidate = CustomUser.objects.get(id = request.query_params.get('user_id'))
+            job = Jobs.objects.get(id = request.data['job'])
             # testing correct object
             print(job)
             JobApplication.objects.create(
