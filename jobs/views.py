@@ -223,13 +223,15 @@ class CandidateApplication(APIView):
                 applicant_name = request.data['applicant_name'],
                 email = request.data['email'],
                 cv = request.data['cv'],
+                cover_letter = request.data['cover_letter'],
                 job_id = job.id,
                 candidate_id = candidate.id
             )
-            application =  JobApplication.objects.latest('id')
-            serializer = ApplicationSerializer(application, many=False)
+            # application =  JobApplication.objects.latest('id')
+            # serializer = ApplicationSerializer(application, many=False)
+            # return Response(serializer.data, status=status.HTTP_200_OK) 
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'message': 'Application posted'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             return Response({'message': 'Application could not be posted'}, status=status.HTTP_404_NOT_FOUND)
