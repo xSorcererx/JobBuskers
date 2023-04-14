@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'jobs',
+
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +85,11 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+
 }
 
 WSGI_APPLICATION = 'backend.wsgi.application'

@@ -14,6 +14,8 @@ from django.utils.decorators import method_decorator
 
 from .serializers import ApplicationSerializer, BookmarkSerializer, CompanyJobSerializer, JobPageSerializer, JobsSerializer, RequirementSerializer, RoleSerializer
 
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import ListAPIView
 # @login_required
 class AddJobs(APIView):
     # permission_classes=[IsAuthenticated]
@@ -248,3 +250,11 @@ class CompanyApplication(APIView):
         except Exception as e:
             print(e)
             return Response({'message': 'Applicaion(s) not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class SearchJobs(ListAPIView):
+    queryset = Jobs.objects.all()
+    serializer_class = CompanyJobSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'industry',]
+

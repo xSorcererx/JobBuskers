@@ -16,7 +16,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class CompanyJobSerializer(serializers.ModelSerializer):
      class Meta:
         model = Jobs
-        fields = ['id', 'title', 'company_id', 'job_type', 'level', ]
+        fields = ['id', 'title', 'company_id', 'job_type', 'level', 'industry']
 class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobRequirements
