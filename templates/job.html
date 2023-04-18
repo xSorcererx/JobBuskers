@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+{% block content%}
+<section class="main">
+    <div class="main-top">
+        <h1>{{title}}</h1>
+        <div class="user-option">
+            <i class="fas fa-circle-user"></i>
+            <span>{{user.name}}</span>
+        </div>
+    </div>
+            <div class="main-section">
+                <div class="header_fixed", id="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Job id</th>
+                                <th>Company</th>
+                                <th>Address</th>
+                                <th>Industry</th>
+                                <th>Job Type</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in job_detail  %}
+                            <tr>
+                                <td>{{detail.id}}</td>
+                                <td>{{detail.company_id.user.name}}</td>
+                                <td>{{detail.address}}</td>
+                                <td>{{detail.industry}}</td>
+                                <td>{{detail.job_type}}</td>
+                                <td>{{detail.level}}</td>
+                                {% comment %} <td>{{sp.active_status}}</td>
+                                <td><button> Delete</button></td> {% endcomment %}
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                            
+                            </section>
+                        </section>
+{% endblock content%}
+  
+

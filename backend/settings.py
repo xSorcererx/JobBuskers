@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'jobs',
 
     'django_filters',
+
+    'adminPanel',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +71,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,9 +88,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':1,
 
 }
 
@@ -104,6 +110,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'JobBuskers',
+#         'USER': 'postgres',
+#         'PASSWORD': 'test123',
+#         'HOST': 'localhost',
+#     }
+# }
 
 
 # Password validation
@@ -141,6 +157,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL="/media/"

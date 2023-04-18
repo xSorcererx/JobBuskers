@@ -24,6 +24,8 @@ from django.template.loader import render_to_string
 
 def tokenGenerator(user):
     return RefreshToken.for_user(user)
+
+
 class Activation(APIView):
     def post(request, uidb64, token):
         User = get_user_model()
@@ -199,8 +201,8 @@ class UpdateDetails(APIView):
         try:        
             user_detail = CustomUser.objects.get(id = request.query_params.get('user'))
             # print(user_detail)
-            # if request.data['display_picture'] is not None and request.data['display_picture'] != '':
-            #     user_detail.display_picture = request.data['display_picture']
+            if request.data['display_picture'] is not None and request.data['display_picture'] != '':
+                user_detail.display_picture = request.data['display_picture']
             
             print('name')
             if request.data['name'] is not None and request.data['name'] != '':
@@ -225,6 +227,8 @@ class UpdateDetails(APIView):
 
                 if request.data['est_year'] is not None and request.data['est_year'] != '':
                     user_detail.est_year = request.data['est_year']
+
+                
 
             
             user_detail.save()
@@ -326,12 +330,7 @@ class SubEducation (APIView):
             return Response({"message": "Education Deleted!", }, status=status.HTTP_200_OK, )
         except:
             return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
-
-            
-        
-
-
-        
+             
 
 class ExperienceView (APIView):
     def get(self, request):

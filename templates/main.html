@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+    <link rel="stylesheet" href="{% static 'styles/mystyle.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <title>Job Buskers</title>
+    <style>
+        .header_fixed{
+            height: 500px
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div class="container">
+        
+        {% include 'sideBar.html' %}
+       
+   
+    {% block content %}
+
+            
+                {% endblock %}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="pop-message">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+    </div>
+    
+<script src="{% static 'js/main.js' %}"></script>
+   
+<script>
+    const ctx = document.getElementById('myChart');
+    const pie = document.getElementById('piechart');
+
+
+    new Chart(pie, {
+        type: 'polarArea',
+        data: {
+          labels: ['February', 'March', 'April'],
+          datasets: [{
+            label: 'Jobs',
+    
+            data: [4, 2, 6],
+        backgroundColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 205, 86, 1)',
+         
+        ],
+          }]
+        },
+        options: {
+            responsive: true,          
+        }
+      });
+    
+
+new Chart(ctx, {
+type: 'bar',
+data: {
+  labels: ['Technician', 'Flutter Developer', 'Carpenter', 'Front-Desk Officer'],
+  datasets: [{
+    label: 'Jobs',
+
+    data: [4, 1, 2, 1],
+backgroundColor: [
+  'rgba(255, 99, 132, 0.5)',
+  'rgba(255, 159, 64, 0.5)',
+  'rgba(255, 205, 86, 0.5)',
+  'rgba(75, 192, 192, 0.5)',
+  'rgba(54, 162, 235, 0.5)',
+  'rgba(153, 102, 255, 0.5)',
+  'rgba(201, 203, 207, 0.5)'
+],
+borderColor: [
+'rgb(255, 99, 132)',
+'rgb(255, 159, 64)',
+'rgb(255, 205, 86)',
+'rgb(75, 192, 192)',
+'rgb(54, 162, 235)',
+'rgb(153, 102, 255)',
+'rgb(201, 203, 207)'
+],
+borderWidth: 1
+  }]
+},
+options: {
+  scales: {
+    y: {
+      beginAtZero: true
+    }
+  }
+}
+});
+
+</script>
+</body>
+</html>

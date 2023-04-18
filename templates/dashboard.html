@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+    {% block content %}
+    <section class="main">
+        <div class="main-top">
+            <h1>Dashboard</h1>
+            <div class="user-option">
+                <i class="fas fa-circle-user"></i>
+                <span>{{user.name}}</span>
+                {% comment %} <span>Admin</span> {% endcomment %}
+            </div>
+        </div>
+        
+    <div class="main-section">
+        <div class="card">
+            <h3>{{compCount}}</h3>
+            <span>Companies</span>
+        </div>
+        <div class="card">
+            <h3>{{candCount}}</h3>
+            <span>Candidates</span>
+        </div>
+        <div class="card">
+            <h3>{{jobCount}}</h3>
+            <span>Jobs</span>
+        </div>
+
+    </div>
+    <section class="main-bottom">
+        <div class="graph-section">
+            <div class="box">
+                <canvas id="piechart"></canvas>
+
+            </div>
+            <div class="box">
+                <canvas id="myChart"></canvas>
+
+            </div>
+
+        </div>
+    </section>
+</section>
+    {% endblock %}

@@ -16,6 +16,7 @@ from .serializers import ApplicationSerializer, BookmarkSerializer, CompanyJobSe
 
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 # @login_required
 class AddJobs(APIView):
     # permission_classes=[IsAuthenticated]
@@ -255,6 +256,7 @@ class CompanyApplication(APIView):
 class SearchJobs(ListAPIView):
     queryset = Jobs.objects.all()
     serializer_class = CompanyJobSerializer
+    # pagination_class = PageNumberPagination
     filter_backends = [SearchFilter]
     search_fields = ['title', 'industry',]
 

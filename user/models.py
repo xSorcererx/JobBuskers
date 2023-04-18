@@ -10,7 +10,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 # custom user.
 class CustomUser (AbstractBaseUser, PermissionsMixin):
     display_picture = models.ImageField(upload_to='images/user', help_text='Display picture containing a person or a logo.', null=True, blank=True)  
-    name = models.CharField(max_length=20, null=False)    
+    name = models.CharField(max_length=20, null=False)
     phone = PhoneNumberField(null=True, blank=True, unique=True)
     email = models.EmailField(_('email_address'), unique=True, max_length=200)
     location = models.CharField(max_length=30, null=True, blank=True)

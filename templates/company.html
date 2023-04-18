@@ -1,0 +1,134 @@
+{% extends 'main.html' %}
+{% block content%}
+<section class="main">
+    <div class="main-top">
+        <h1>{{title}}</h1>
+        <div class="user-option">
+            <i class="fas fa-circle-user"></i>
+            <span>{{user.name}}</span>
+        </div>
+    </div>
+            <div class="main-section">
+
+                <div id="addButton">
+                    <button class="add" onclick="openform()">
+                      <i class="fas fa-add"></i>
+                      <span>Add user</span>
+                    </button>
+                </div>
+                
+
+                <div class="header_fixed", id="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Company id</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Industry</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sp in compData  %}
+                            <tr>
+                                <td>{{sp.id}}</td>
+                                <td>{{sp.user.name}}</td>
+                                <td>{{sp.user.email}}</td>
+                                <td>{{sp.user.phone}}</td>
+                                <td>{{sp.user.location}}</td>
+                                <td>{{sp.industry}}</td>
+                                {% comment %} <td>{{sp.booking_count}}</td> {% endcomment %}
+                                {% comment %} <td>{{sp.success}}</td> {% endcomment %}
+                                {% comment %} <td>{{sp.active_status}}</td> {% endcomment %}
+                                <td><form action="{% url 'delete-user' sp.user.id %}" method="post">
+                                  {% csrf_token %}
+
+                                  <input type="submit" value="Delete">
+                                </form></td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                            <div id="add-form">
+  <form method="POST">
+    {% csrf_token %}
+    
+    <div class="add-field">
+        <label for="name">Name</label>
+        <div class="field">
+            {{form.name}}
+        </div>  
+      </div>
+      
+      <div class="add-field">
+        <label for="email">Email</label>
+        <div class="field">
+            {{form.email}}
+        </div>
+      </div>
+      <div class="add-field">
+        <label for="phone">Phone number</label>
+        <div class="field">
+            {{form.phone}}
+        </div>
+      </div>
+
+
+      <div class="add-field">
+        <label for="gender">Industry</label>
+        {{comp_form.industry}}
+      </div>
+
+      {% comment %} <div class="add-field">
+        <label for="Service type">Service type</label>
+        {{sp_form.service}}
+      </div> {% endcomment %}
+
+      <div class="add-field">
+        <label for="Price">Location</label>
+        <div class="field">
+            {{form.location}}
+            </div>
+      </div>
+
+      {% comment %} <div class="add-field">
+        <label for="password">Password</label>
+        <div class="field">
+        {{form.password}}
+           
+        </div>
+      </div> {% endcomment %}
+      <div class="add-field">
+        <label for="price">Password</label>
+        <div class="field">
+            <input type="password" name="password" required />
+        </div>
+      </div>
+      <div class="add-field">
+        <label for="price">Confirm password</label>
+        <div class="field">
+            <input type="password" name="confirm_password" required />
+        </div>
+      </div>
+
+
+      <div class="button">
+        <input type="submit" value="Add" class="add" />
+        <input type="submit" value="Cancel" class="cancel" onclick="closeform()"/>
+      </div>
+  </form>
+
+                                
+                                  
+                              </div>
+                            </section>
+                        </section>
+{% endblock content%}
+  
+

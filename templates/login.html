@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+{% load static%}
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/mystyle.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+
+    <title>Login</title>
+
+    <style>
+        
+
+.alert{
+    background:  #ee9c9c;
+    padding:  20px 40px;
+    min-width: 420px;
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    border-radius: 4px;
+    border-left: 8px solid #f23535;
+    overflow: hidden;
+  }
+  
+  .alert.show{
+    animation: show_silde 1s ease forwards;
+  }
+  
+  @keyframes show_slide {
+    0%{
+      transform: translateX(100%);
+    }
+    40%{
+      transform: translateX(-10%);
+    }
+    80%{
+      transform: translateX(0%);
+    }
+   100%{
+      transform: translateX(-10px);
+    }
+  }
+  
+  .alert .fa-exclamation-triangle{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform:  translateY(-50%);
+    color: #ce0a00;
+    font-size:  26px;
+  }
+  
+  .alert .msg{
+    padding: 0px 20px;
+    font-size: 18px;
+    color: #ce0a00;
+  }
+  
+  .alert .close-btn{
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    /* background: #ec6f6f; */
+    padding: 20px 18px;
+    transform: translateY(-50%
+    );
+    cursor: pointer;
+  }
+  
+  .close-btn .fa-times{
+    color: #ef2929;
+    font-size: 24px;
+    line-height: 40px;
+  }
+    </style>
+   
+</head>
+<body>
+    {% block content%}
+
+    {% if messages %}
+    <div class="alert">
+        {% for message in messages %}
+        <span class="fas fa-exclamation-triangle"></span>
+        <span class="msg">Error: {{ message }}</span>
+        <div class="close-btn">
+            <span class="fas fa-times"></span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+{% comment %} <div class="login-container">
+
+</div> {% endcomment %}
+<div class="main-container" id="blur">
+    <div class="wrapper" >
+        <div class="title-text" id="signIn">
+            <div class="title sign-in">Login</div>
+        </div>
+
+        <div class="form-container" id="frontface">
+            <div class="frontface" id="front">
+                <form action="" class="login" method="POST">
+          {% csrf_token %}
+
+                    <div class="field">
+                        <input type="text" placeholder="Username" name="username" id="username"required>
+                    </div>
+                    <div class="field">
+                        <input type="password" placeholder="Password" name="password" id="password" trequired>
+                    </div>
+                    <div class="link">
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <div class="field">
+                        <input type="submit" value="Sign In">
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
+    
+</body>
+</html>

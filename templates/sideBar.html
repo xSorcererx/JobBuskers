@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+
+        <nav>
+            <ul>
+                <li class="logo">
+                    <img src="{% static 'images/logoo.png' %}">
+                </li>
+
+                <li><a href="{% url 'dashboard'%}">
+                    <i class="fas fa-dashboard"></i>
+                    <span class="nav-item">Dashboard</span>
+                </a></li>
+                <li><a href="{%url 'company'%}">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-item">Companies</span>
+                </a></li>
+                <li><a href="{%url 'candidate'%}">
+                     <i class="fas fa-user"></i>
+                    <span class="nav-item">Candidates</span>
+                </a></li>
+                <li><a href="{%url 'job'%}">
+                    <i class="fas fa-list"></i>
+                   <span class="nav-item">Jobs</span>
+               </a></li>
+           </a></li>
+           
+
+                <li><a href="{% url 'logout' %}" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-item">Logout</span>
+                </a></li>
+            </ul>
+        </nav>
+
+       
+  
