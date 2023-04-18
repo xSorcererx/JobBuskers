@@ -12,11 +12,20 @@ from .models import Bookmarks, Jobs, JobRoles, JobRequirements, JobApplication
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.decorators import method_decorator
 
-from .serializers import ApplicationSerializer, BookmarkSerializer, CompanyJobSerializer, JobPageSerializer, JobsSerializer, RequirementSerializer, RoleSerializer
+from .serializers import (
+    ApplicationSerializer, 
+    BookmarkSerializer, 
+    CompanyJobSerializer, 
+    JobPageSerializer, 
+    JobsSerializer, 
+    RequirementSerializer, 
+    RoleSerializer,
+    CandidateBookmarks,
+)
 
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
-from rest_framework.pagination import PageNumberPagination
+# from rest_framework.pagination import PageNumberPagination
 # @login_required
 class AddJobs(APIView):
     # permission_classes=[IsAuthenticated]
@@ -89,6 +98,7 @@ class GetJob(APIView):
             print(e)
             return Response({'message': 'Jobs not found'}, status=status.HTTP_404_NOT_FOUND)
 
+   
 
 class Bookmark(APIView):
     def get(self, request):
@@ -133,7 +143,20 @@ class Bookmark(APIView):
             print(e)
             return Response({'message': 'Bookmarks not found'}, status=status.HTTP_404_NOT_FOUND)
         
+class CandidateBookmark(APIView):
+    def get(self, request):
+        try:
+            bookmarks = Bookmarks.objects.filter(user=request.query_params.get('user'))            
+            # bookmarked_jobs = Jobs.objects.filter(id=bookmarks.job)
 
+            serializer = CandidateBookmarks(bookmarks, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+            return Response({'message': 'Bookmarks not found'}, status=status.HTTP_404_NOT_FOUND)
+        
 
 class CompanyJob(APIView):
     def get(self, request):

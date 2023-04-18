@@ -13,6 +13,7 @@ from .views import (
     CompanyApplication, 
     ApplyJob,
     SearchJobs,
+    CandidateBookmark,
 )
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('job_reqs/<int:pk>/', JobReqs.as_view(), name='job_reqs'),
 
     path('bookmarks/', Bookmark.as_view(), name='bookmarks'),
+    path('bookmarked-jobs/', CandidateBookmark.as_view(), name='bookmarked-job'),
     
     
     path('candidate_apply/', CandidateApplication.as_view(), name='get_candidate_applications'),

@@ -17,6 +17,13 @@ class CompanyJobSerializer(serializers.ModelSerializer):
      class Meta:
         model = Jobs
         fields = ['id', 'title', 'company_id', 'job_type', 'level', 'industry']
+
+class CandidateBookmarks(serializers.ModelSerializer):
+    job = CompanyJobSerializer(many=False, read_only=True)
+    class Meta:
+        model = Bookmarks
+        fields = '__all__'
+
 class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobRequirements
