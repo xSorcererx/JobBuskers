@@ -124,7 +124,11 @@ class Bookmark(APIView):
             bookmark = Bookmarks.objects.get(id=request.query_params.get('id'))
             bookmark.delete()
 
-            return Response({'message': 'Bookmark deleted'}, status=status.HTTP_200_OK)
+            new_bookmark = Bookmarks.objects.all()
+            serializer = BookmarkSerializer(new_bookmark, many = True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            # return Response({'message': 'Bookmark deleted'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             return Response({'message': 'Bookmarks not found'}, status=status.HTTP_404_NOT_FOUND)
