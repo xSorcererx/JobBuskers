@@ -9,7 +9,7 @@ class LoginSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['name', 'display_picture', 'email', 'location', 'description']
+        fields = ['name', 'display_picture', 'email', 'location', 'description', 'phone']
 
 class CompanySerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only = True)

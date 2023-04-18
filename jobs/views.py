@@ -114,7 +114,7 @@ class Bookmark(APIView):
             bookmark = Bookmarks.objects.latest('id')
             serializer = BookmarkSerializer(bookmark, many=False)
 
-            return Response(serializer.data, status=status.HTTP_200_OK)            
+            return Response(serializer.data, status=status.HTTP_200_OK)       
         except Exception as e:
             print(e)
             return Response({'message': 'Bookmark could not be created'}, status=status.HTTP_404_NOT_FOUND)
