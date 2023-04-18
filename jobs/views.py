@@ -111,7 +111,7 @@ class Bookmark(APIView):
                 user_id = user.id,
                 job_id = job.id
             )
-            bookmark = Bookmarks.object.latest('id')
+            bookmark = Bookmarks.objects.latest('id')
             serializer = BookmarkSerializer(bookmark, many=False)
 
             return Response(serializer.data, status=status.HTTP_200_OK)            
