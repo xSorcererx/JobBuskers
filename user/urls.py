@@ -1,6 +1,19 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import UserRegistration, UserLogin, GetCompany, UpdateDetails, GetCandidate, UserActivation, Activation, EducationView, SubEducation, ExperienceView, SubExperience
+from .views import (
+    UserRegistration, 
+    UserLogin, 
+    GetCompany, 
+    UpdateDetails, 
+    GetCandidate, 
+    UserActivation, 
+    Activation, 
+    EducationView, 
+    SubEducation, 
+    ExperienceView, 
+    SubExperience, 
+    Notification
+)
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -24,4 +37,6 @@ urlpatterns = [
     path('education-update/', SubEducation.as_view(), name='education'),
     path('experience/', ExperienceView.as_view(), name='education'),
     path('exp-update/', SubExperience.as_view(), name='education'),
+
+    path('notification/', Notification.as_view(), name='token'),
 ]

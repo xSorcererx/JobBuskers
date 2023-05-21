@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import CustomUser, Candidate, Company, Education, Experience
+from .models import CustomUser, Candidate, Company, Education, Experience, NotificationToken
 from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login, logout
 
-from .serializers import ExperienceSerializer, LoginSerializer, UserSerializer, CompanySerializer, CandidateSerializer, EducationSerializer
+from .serializers import ExperienceSerializer, LoginSerializer, UserSerializer, CompanySerializer, CandidateSerializer, EducationSerializer, TokenSerializer
 
 # rest framework
 from rest_framework.response import Response
@@ -84,6 +84,9 @@ class UserRegistration(APIView):
         email = request.data['email']
         location = request.data['location']
         user_type = request.data['user_type']
+
+        # is_verified = True
+
         # gender = request.data['gender']
         # industry = request.data['industry']
 
@@ -401,3 +404,48 @@ class SubExperience(APIView):
             return Response({"message": "Experience Deleted!", }, status=status.HTTP_200_OK, )
         except:
             return Response({"message": "Error!",}, status=status.HTTP_400_BAD_REQUEST, )
+        
+
+class Notification(APIView):
+    def get(self, request):
+        try:      
+            token = NotificationToken.objects.filter(preference = request.query_params.get('preference'))
+            serializer = TokenSerializer(token, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({'message': 'User token not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def post(self, request):
+        try:
+            userInstance = CustomUser.objects.get(id =request.data['user'])
+            NotificationToken.objects.create(
+                user = userInstance,
+                token = request.data['token'],
+                preference = request.query_params.get('preference')
+            )
+
+            token = NotificationToken.objects.latest('id')
+            serializer = TokenSerializer(token, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({'message': 'User token not created'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def put(self, request):
+        try:
+            tokenObject = NotificationToken.objects.get(user = request.query_params.get('user'))
+            if request.data['token'] is not None and request.data['token'] != '':
+                tokenObject.token = request.data['token']
+            tokenObject.save()
+            serializer = TokenSerializer(tokenObject, many=False)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('exception:')
+            print(e)
+            return Response({'message': 'User token not updated'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+

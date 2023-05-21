@@ -92,8 +92,7 @@ class Company(models.Model):
     website = models.CharField(max_length=20, null=True, blank=True)    
     est_year = models.PositiveSmallIntegerField(null=True, blank=True)
     banner_image = models.ImageField(upload_to='images/user/company', help_text='Job Banner', null=True, blank=True)
-    
-    
+     
     
     def __str__(self):
         return self.user.name
@@ -117,3 +116,20 @@ class Experience(models.Model):
     start_year = models.CharField(max_length=4, null=False)
     end_year = models.CharField(max_length=4, null=True)
     description = models.CharField(max_length=200, null=True)
+
+
+class NotificationToken(models.Model):
+    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
+                  ('IT & Telecommunication', 'IT & Telecommunication'), 
+                  ('Teaching/ Education', 'Teaching/ Education'),
+                  ('NGO/ INGO', 'NGO/ INGO'), 
+                  ('Graphics/ Designing', 'Graphics/ Designing'),
+                  ('Hospitality', 'Hospitality'), 
+                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
+                  ('Legal Services', 'Legal Services'),
+                  ('Other', 'Other')]
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100,blank=True, null=True)
+    preference = models.CharField('Preference', max_length=200, 
+            choices=pref_selection, default='Other', null=False)
