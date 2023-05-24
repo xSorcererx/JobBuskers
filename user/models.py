@@ -130,6 +130,11 @@ class NotificationToken(models.Model):
                   ('Other', 'Other')]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    token = models.CharField(max_length=100,blank=True, null=True)
+    token = models.CharField(max_length=300,blank=True, null=True)
     preference = models.CharField('Preference', max_length=200, 
             choices=pref_selection, default='Other', null=False)
+
+class Recommendation(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    job = models.CharField(max_length=20, null=True, blank=True)
+    location = models.CharField(max_length=30, null=True, blank=True)

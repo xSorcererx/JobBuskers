@@ -1,3 +1,4 @@
+import random 
 from django.shortcuts import render
 from .models import CustomUser, Candidate, Company, Education, Experience, NotificationToken
 from django.contrib.auth.models import User
@@ -12,7 +13,7 @@ from rest_framework.decorators import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-# email verification.
+
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
@@ -85,8 +86,6 @@ class UserRegistration(APIView):
         location = request.data['location']
         user_type = request.data['user_type']
 
-        # is_verified = True
-
         # gender = request.data['gender']
         # industry = request.data['industry']
 
@@ -103,7 +102,9 @@ class UserRegistration(APIView):
                         name=name,
                         phone=phone,
                         location=location,
-                        user_type=user_type
+                        user_type=user_type,
+                        is_verified = True
+
                     )                    
                     id = CustomUser.objects.latest('id')
                     Company.objects.create(
@@ -133,6 +134,7 @@ class UserRegistration(APIView):
             print(e)
             return Response({'message': 'Registration Error.'}, status=status.HTTP_200_OK)
 
+
 class UserLogin(APIView):
     def get(self, request):    
         user = User.objects.all()
@@ -155,7 +157,6 @@ class UserLogin(APIView):
             print('  ')
             print(user)
             if user is not None:
-                # refresh = RefreshToken.for_user(user)
                 login(request, user)
                 print("login")
 
@@ -163,11 +164,6 @@ class UserLogin(APIView):
                 print('done')
                 serializer = LoginSerializer(userDetail, many=False)
 
-                # response = {   
-                #     # "refresh": str(refresh),
-                #     # "access": str(refresh.access_token),  
-                #     "user_data": serializer.data,         
-                # }
                 print(serializer.data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
@@ -187,19 +183,36 @@ class ChangePw(APIView):
             rePw = request.data['repassword']
 
             if newPw == rePw:
-                user = CustomUser.objects.get(email=request.user)
+                user = CustomUser.objects.get(email=request.data['email'])
                 user.set_password(newPw)
                 user.save()
-                return Response({"message":"The password has been reset."}, status=status.HTTP_200_OK)
+                return Response({"message":"The password has been changed."}, status=status.HTTP_200_OK)
             else:
                 return Response({"message":"Password does not match."}, status=status.HTTP_409_CONFLICT)
         except Exception as e:
             print(e)
             return Response({"message": "Error!", }, status=status.HTTP_400_BAD_REQUEST, )
 
+
+class ResetPassword(APIView):
+    def put(self, request, *args, **kwargs):
+        try:
+            newPw = request.data['password']
+            user = CustomUser.objects.get(email=request.data['email'])
+
+            if user:
+                user.set_password(newPw)
+                user.save()
+                return Response({"message": "The password has been changed."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "The password could not be changed."}, status=status.HTTP_409_CONFLICT)
+        except Exception as e:
+            print(e)
+            return Response({"message": "User does not exist."}, status=status.HTTP_400_BAD_REQUEST,)
+
+
 # update user
 class UpdateDetails(APIView):
-
     def put(self, request):
         try:        
             user_detail = CustomUser.objects.get(id = request.query_params.get('user'))
@@ -418,7 +431,10 @@ class Notification(APIView):
         
     def post(self, request):
         try:
-            userInstance = CustomUser.objects.get(id =request.data['user'])
+            print(request.query_params.get('preference'))
+            print(request.data['user'])
+            print(request.data['token'])
+            userInstance = CustomUser.objects.get(id = request.data['user'])
             NotificationToken.objects.create(
                 user = userInstance,
                 token = request.data['token'],

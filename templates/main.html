@@ -48,7 +48,7 @@
     new Chart(pie, {
         type: 'polarArea',
         data: {
-          labels: ['February', 'March', 'April'],
+          labels: ['January', 'February', 'March'],
           datasets: [{
             label: 'Jobs',
     
@@ -70,11 +70,12 @@
 new Chart(ctx, {
 type: 'bar',
 data: {
-  labels: ['Technician', 'Flutter Developer', 'Carpenter', 'Front-Desk Officer'],
+  labels: ['React Developer', 'Flutter Developer', 'Receptionist', 'Django Developer'],
   datasets: [{
     label: 'Jobs',
 
-    data: [4, 1, 2, 1],
+    data: [{{reactCount}}, {{flutterCount}},{{receptionistCount}},{{djangoCount}}],
+
 backgroundColor: [
   'rgba(255, 99, 132, 0.5)',
   'rgba(255, 159, 64, 0.5)',

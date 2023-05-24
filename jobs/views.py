@@ -278,12 +278,16 @@ class CompanyApplication(APIView):
         except Exception as e:
             print(e)
             return Response({'message': 'Applicaion(s) not found.'}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 class SearchJobs(ListAPIView):
     queryset = Jobs.objects.all()
     serializer_class = CompanyJobSerializer
-    # pagination_class = PageNumberPagination
     filter_backends = [SearchFilter]
     search_fields = ['title', 'industry',]
+
+
+class JobListings(APIView):
+    def get(self, request):
+        job = Jobs.object.filter()
 

@@ -46,13 +46,22 @@ def dashboard(request):
     candidate = CustomUser.objects.filter(user_type='3').count()
     jobs = Jobs.objects.all().count()
 
+    flutter = Jobs.objects.filter(title='Flutter Developer').count()
+    react = Jobs.objects.filter(title='React Developer').count()
+    django = Jobs.objects.filter(title='Django Developer').count()
+    receptionist = Jobs.objects.filter(title='Receptionist').count()
+    
+    
 
     response = {
         'compCount': company,
         'candCount': candidate,
         'title': 'Dashboard',
         'jobCount': jobs,
-
+        'flutterCount': flutter,
+        'reactCount': react,
+        'djangoCount': django,
+        'receptionistCount': receptionist,
     }
 
     return render(request, 'dashboard.html', response)

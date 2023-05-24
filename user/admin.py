@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import CustomUser, Company, Candidate, Education, Experience, NotificationToken
+from .models import (
+    CustomUser,
+    Company,
+    Candidate,
+    Education,
+    Experience,
+    NotificationToken,
+    Recommendation,)
 
 
 # Register your models here.
@@ -9,3 +16,4 @@ admin.site.register(Company)
 admin.site.register(Education)
 admin.site.register(Experience)
 admin.site.register(NotificationToken)
+admin.site.register(Recommendation)
