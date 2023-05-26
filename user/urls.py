@@ -14,7 +14,9 @@ from .views import (
     SubExperience, 
     Notification,
     ChangePw,
-    ResetPassword
+    ResetPassword,
+    RecommendJobs,
+    RecommendCandidate
 )
 
 from rest_framework_simplejwt.views import (
@@ -44,4 +46,7 @@ urlpatterns = [
     path('exp-update/', SubExperience.as_view(), name='education'),
 
     path('notification/', Notification.as_view(), name='token'),
+
+    path('recommend-jobs/', RecommendJobs.as_view(), name='recommend-jobs'),
+    path('recommend-cands/', RecommendCandidate.as_view(), name='recommend-cands'),
 ]

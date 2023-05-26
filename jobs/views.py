@@ -286,8 +286,3 @@ class SearchJobs(ListAPIView):
     filter_backends = [SearchFilter]
     search_fields = ['title', 'industry',]
 
-
-class JobListings(APIView):
-    def get(self, request):
-        job = Jobs.object.filter()
-

@@ -9,26 +9,28 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # custom user.
 class CustomUser (AbstractBaseUser, PermissionsMixin):
-    display_picture = models.ImageField(upload_to='images/user', help_text='Display picture containing a person or a logo.', null=True, blank=True)  
+    display_picture = models.ImageField(
+        upload_to='images/user', help_text='Display picture containing a person or a logo.', null=True, blank=True)
     name = models.CharField(max_length=20, null=False)
     phone = PhoneNumberField(null=True, blank=True, unique=True)
     email = models.EmailField(_('email_address'), unique=True, max_length=200)
     location = models.CharField(max_length=30, null=True, blank=True)
-    description =  models.CharField(max_length=900, null=True, blank=True)   
-    is_verified = models.BooleanField(default=False)  
-    is_active = models.BooleanField(default=False) 
+    description = models.CharField(max_length=900, null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    
+
     # user type choices
     class UserType(models.IntegerChoices):
         ADMIN = 1, _('Admin'),
-        COMPANY = 2, _('Company'),        
+        COMPANY = 2, _('Company'),
         CANDIDATE = 3, _('Candidate')
-    user_type = models.IntegerField(choices=UserType.choices, blank=True, null=True)
+    user_type = models.IntegerField(
+        choices=UserType.choices, blank=True, null=True)
 
     #  Custom username
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'phone', 'location',]
+    REQUIRED_FIELDS = ['name', 'phone', 'location', ]
 
     # user manager
     objects = CustomUserManager()
@@ -36,8 +38,8 @@ class CustomUser (AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.name
 
-
     # User roles
+
     @property
     def admin(self):
         return self.user_type == self.UserType.ADMIN
@@ -45,55 +47,58 @@ class CustomUser (AbstractBaseUser, PermissionsMixin):
     @property
     def company(self):
         return self.user_type == self.UserType.COMPANY
-        
+
     @property
     def candidate(self):
         return self.user_type == self.UserType.CANDIDATE
 
 # candidate table
+
+
 class Candidate(models.Model):
     # Gender Selections
-    gender_selection = [('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')]
+    gender_selection = [
+        ('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')]
 
-    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
-                  ('IT & Telecommunication', 'IT & Telecommunication'), 
-                  ('Teaching/ Education', 'Teaching/ Education'),
-                  ('NGO/ INGO', 'NGO/ INGO'), 
-                  ('Graphics/ Designing', 'Graphics/ Designing'),
-                  ('Hospitality', 'Hospitality'), 
-                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
-                  ('Legal Services', 'Legal Services'),
-                  ('Other', 'Other')]
+    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'),
+                      ('IT & Telecommunication', 'IT & Telecommunication'),
+                      ('Teaching/ Education', 'Teaching/ Education'),
+                      ('NGO/ INGO', 'NGO/ INGO'),
+                      ('Graphics/ Designing', 'Graphics/ Designing'),
+                      ('Hospitality', 'Hospitality'),
+                      ('Sales/ Public Relation', 'Sales/ Public Relation'),
+                      ('Legal Services', 'Legal Services'),
+                      ('Other', 'Other')]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    gender = models.CharField('Gender', max_length=8, 
-            choices=gender_selection, default='Male', null=False)
-    preference = models.CharField('Preference', max_length=200, 
-            choices=pref_selection, default='Other', null=False)
+    gender = models.CharField('Gender', max_length=8,
+                              choices=gender_selection, default='Male', null=False)
+    preference = models.CharField('Preference', max_length=200,
+                                  choices=pref_selection, default='Other', null=False)
 
     def __str__(self):
         return self.user.name
 
 # company table
 class Company(models.Model):
-    selections = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
-                  ('IT & Telecommunication', 'IT & Telecommunication'), 
+    selections = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'),
+                  ('IT & Telecommunication', 'IT & Telecommunication'),
                   ('Teaching/ Education', 'Teaching/ Education'),
-                  ('NGO/ INGO', 'NGO/ INGO'), 
+                  ('NGO/ INGO', 'NGO/ INGO'),
                   ('Graphics/ Designing', 'Graphics/ Designing'),
-                  ('Hospitality', 'Hospitality'), 
-                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
+                  ('Hospitality', 'Hospitality'),
+                  ('Sales/ Public Relation', 'Sales/ Public Relation'),
                   ('Legal Services', 'Legal Services'),
                   ('Other', 'Other')]
-    
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    industry = models.CharField('Industry', max_length=200,     
-            choices=selections, null=False, default='Other')
-    website = models.CharField(max_length=20, null=True, blank=True)    
+    industry = models.CharField('Industry', max_length=200,
+                                choices=selections, null=False, default='Other')
+    website = models.CharField(max_length=20, null=True, blank=True)
     est_year = models.PositiveSmallIntegerField(null=True, blank=True)
-    banner_image = models.ImageField(upload_to='images/user/company', help_text='Job Banner', null=True, blank=True)
-     
-    
+    banner_image = models.ImageField(
+        upload_to='images/user/company', help_text='Job Banner', null=True, blank=True)
+
     def __str__(self):
         return self.user.name
 
@@ -101,16 +106,16 @@ class Company(models.Model):
 # Education
 class Education(models.Model):
     candidate = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
-    institute = models.CharField(max_length=25, null = False)
+    institute = models.CharField(max_length=25, null=False)
     address = models.CharField(max_length=25)
     start_year = models.CharField(max_length=4, null=False)
     end_year = models.CharField(max_length=4, null=True)
 
 
-#Experience
+# Experience
 class Experience(models.Model):
     candidate = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
-    company = models.CharField(max_length=25, null = False)
+    company = models.CharField(max_length=25, null=False)
     job_title = models.CharField(max_length=25)
     address = models.CharField(max_length=25)
     start_year = models.CharField(max_length=4, null=False)
@@ -119,22 +124,31 @@ class Experience(models.Model):
 
 
 class NotificationToken(models.Model):
-    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'), 
-                  ('IT & Telecommunication', 'IT & Telecommunication'), 
-                  ('Teaching/ Education', 'Teaching/ Education'),
-                  ('NGO/ INGO', 'NGO/ INGO'), 
-                  ('Graphics/ Designing', 'Graphics/ Designing'),
-                  ('Hospitality', 'Hospitality'), 
-                  ('Sales/ Public Relation', 'Sales/ Public Relation'), 
-                  ('Legal Services', 'Legal Services'),
-                  ('Other', 'Other')]
+    pref_selection = [('Architechture/ Interior Designing', 'Architechture/ Interior Designing'),
+                      ('IT & Telecommunication', 'IT & Telecommunication'),
+                      ('Teaching/ Education', 'Teaching/ Education'),
+                      ('NGO/ INGO', 'NGO/ INGO'),
+                      ('Graphics/ Designing', 'Graphics/ Designing'),
+                      ('Hospitality', 'Hospitality'),
+                      ('Sales/ Public Relation', 'Sales/ Public Relation'),
+                      ('Legal Services', 'Legal Services'),
+                      ('Other', 'Other')]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    token = models.CharField(max_length=300,blank=True, null=True)
-    preference = models.CharField('Preference', max_length=200, 
-            choices=pref_selection, default='Other', null=False)
+    token = models.CharField(max_length=300, blank=True, null=True)
+    preference = models.CharField('Preference', max_length=200,
+                                  choices=pref_selection, default='Other', null=False)
+
 
 class Recommendation(models.Model):
+    status_selections = [('Senior', 'On-Site'),
+                         ('Mid-Level', 'Mid-Level'),
+                         ('Junior', 'Junior')]
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     job = models.CharField(max_length=20, null=True, blank=True)
-    location = models.CharField(max_length=30, null=True, blank=True)
+    job_level = models.CharField('Level', max_length=200,
+                                 choices=status_selections, default='Junior', null=False)
+
+    def __str__(self):
+        return self.user.name

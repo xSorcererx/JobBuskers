@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Candidate, Company, Education, Experience, NotificationToken
+from .models import CustomUser, Candidate, Company, Education, Experience, NotificationToken, Recommendation
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,4 +37,9 @@ class ExperienceSerializer(serializers.ModelSerializer):
 class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotificationToken
+        fields = '__all__'
+
+class RecommendationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recommendation
         fields = '__all__'
