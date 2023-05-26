@@ -122,6 +122,7 @@ class UserRegistration(APIView):
                         name=name,
                         phone=phone,
                         location=location,
+                        is_verified=True,
                         user_type=user_type
                     )
                     id = CustomUser.objects.latest('id')
@@ -178,8 +179,6 @@ class UserLogin(APIView):
             return Response({"message": "Email or password doesn't match!", }, status=status.HTTP_400_BAD_REQUEST)
 
 # change password.
-
-
 class ChangePw(APIView):
     def put(self, request, *args, **kwargs):
         try:
@@ -481,7 +480,7 @@ class RecommendJobs(APIView):
             userInstance = CustomUser.objects.get(id=request.data['user'])     
             rec_option = Recommendation.objects.get(user=userInstance)
             rec_jobs = Jobs.objects.filter(title=rec_option.job)
-            rec_jobs_serializer = JobsSerializer(rec_jobs, many=True)
+            rec_jobs_serializer = JobsSerializer(rec_jobs[:5], many=True)
             data = rec_jobs_serializer.data
             recommendation = []
 
@@ -532,7 +531,7 @@ class RecommendCandidate(APIView):
             userInstance = CustomUser.objects.get(id=request.data['user'])
             company = Company.objects.get(user = userInstance)
             candidates = Candidate.objects.filter(preference = company.industry)
-            serializer = CandidateSerializer(candidates, many=True)
+            serializer = CandidateSerializer(candidates[:5], many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:

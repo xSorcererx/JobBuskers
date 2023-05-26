@@ -40,9 +40,6 @@
                                 <td>{{sp.user.phone}}</td>
                                 <td>{{sp.user.location}}</td>
                                 <td>{{sp.industry}}</td>
-                                {% comment %} <td>{{sp.booking_count}}</td> {% endcomment %}
-                                {% comment %} <td>{{sp.success}}</td> {% endcomment %}
-                                {% comment %} <td>{{sp.active_status}}</td> {% endcomment %}
                                 <td><form action="{% url 'delete-user' sp.user.id %}" method="post">
                                   {% csrf_token %}
 
@@ -55,7 +52,7 @@
                     </table>
                 </div>
 
-                            <div id="add-form">
+                <div id="add-form">
   <form method="POST">
     {% csrf_token %}
     
@@ -81,14 +78,9 @@
 
 
       <div class="add-field">
-        <label for="gender">Industry</label>
+        <label for="industry">Industry</label>
         {{comp_form.industry}}
       </div>
-
-      {% comment %} <div class="add-field">
-        <label for="Service type">Service type</label>
-        {{sp_form.service}}
-      </div> {% endcomment %}
 
       <div class="add-field">
         <label for="Price">Location</label>
@@ -97,19 +89,13 @@
             </div>
       </div>
 
-      {% comment %} <div class="add-field">
-        <label for="password">Password</label>
-        <div class="field">
-        {{form.password}}
-           
-        </div>
-      </div> {% endcomment %}
       <div class="add-field">
         <label for="price">Password</label>
         <div class="field">
             <input type="password" name="password" required />
         </div>
       </div>
+
       <div class="add-field">
         <label for="price">Confirm password</label>
         <div class="field">

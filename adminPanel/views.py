@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from jobs.models import Jobs
 
 
-
 def loginPage(request):
     try:
         if request.user.is_authenticated:
@@ -22,7 +21,8 @@ def loginPage(request):
                 admin = CustomUser.objects.get(email=username)
 
                 if admin.user_type == 1:
-                    users = auth.authenticate(username=username, password=password)
+                    users = auth.authenticate(
+                        username=username, password=password)
 
                     if users is not None:
                         auth.login(request, users)
@@ -39,7 +39,6 @@ def loginPage(request):
         return redirect('/')
 
 
-
 @login_required(login_url='/')
 def dashboard(request):
     company = CustomUser.objects.filter(user_type='2').count()
@@ -50,8 +49,6 @@ def dashboard(request):
     react = Jobs.objects.filter(title='React Developer').count()
     django = Jobs.objects.filter(title='Django Developer').count()
     receptionist = Jobs.objects.filter(title='Receptionist').count()
-    
-    
 
     response = {
         'compCount': company,
@@ -67,38 +64,42 @@ def dashboard(request):
     return render(request, 'dashboard.html', response)
 
 
-
 def logoutUser(request):
     auth.logout(request)
     return redirect('/')
 
 
-
 @login_required(login_url='/')
 def addCandidate(request):
-    form = CustomUserForm
-    cand_form = CandidateForm
+    form=CustomUserForm
+    cand_form=CandidateForm
 
     if request.method == 'POST':
         pw = request.POST['password']
         confirm_pw = request.POST['confirm_password']
+        name = request.POST['name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        location = request.POST['location']
+        gender = request.POST['gender']
+        user_type = '3'
+
         if pw == confirm_pw:
-            form = CustomUserForm(request.POST)
-            cand_form = CandidateForm(request.POST)
+            CustomUser.objects.create_user(
+                email=email,
+                password=pw,
+                name=name,
+                phone=phone,
+                location=location,
+                is_verified=True,
+                user_type=user_type
+            )
 
-            if form.is_valid():
-                user_instance=form.save(commit=False)
-                user_instance.user_type = '3'
-                user_instance.password = pw
-                user_instance.is_active=True
-                user_instance.save()
-                new_sp = Candidate.objects.latest('id')
-
-                if cand_form.is_valid():
-                    instance = cand_form.save(commit=False)
-                    instance.user = new_sp.id
-                    instance.save()
-                return redirect('../candidate')
+            id = CustomUser.objects.latest('id')
+            Candidate.objects.create(
+                user=id,
+                gender=gender,
+            )
         else:
             messages.info(request, 'Your password does not match.')
 
@@ -106,12 +107,12 @@ def addCandidate(request):
     candData = Candidate.objects.all()
    
     context = {
-               'form': form,
-               'cand_form': cand_form,
-               'userData': userData,
-               'candData': candData,
-               'title': 'Candidates'
-               }
+        'form': form,
+        'cand_form': cand_form,
+        'userData': userData,
+        'candData': candData,
+        'title': 'Candidates'
+    }
     return render(request, 'candidate.html', context)
 
 
@@ -120,27 +121,31 @@ def addCandidate(request):
 def addCompany(request):
     form = CustomUserForm
     comp_form = CompanyForm
-
     if request.method == 'POST':
         pw = request.POST['password']
         confirm_pw = request.POST['confirm_password']
+        name = request.POST['name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        location = request.POST['location']
+        user_type = '3'
+
         if pw == confirm_pw:
-            form = CustomUserForm(request.POST)
-            comp_form = CompanyForm(request.POST)
+            CustomUser.objects.create_user(
+                email=email,
+                password=pw,
+                name=name,
+                phone=phone,
+                location=location,
+                user_type=user_type,
+                is_verified=True
+            )
 
-            if form.is_valid():
-                user_instance=form.save(commit=False)
-                user_instance.user_type = '2'
-                user_instance.password = pw
-                user_instance.is_active=True
-                user_instance.save()
-                new_sp = Company.objects.latest('id')
-
-                if comp_form.is_valid():
-                    instance = comp_form.save(commit=False)
-                    instance.user = new_sp.id
-                    instance.save()
-                return redirect('../company')
+            id = CustomUser.objects.latest('id')
+            Company.objects.create(
+                user=id,
+                industry=request.POST['industry'],
+            )
         else:
             messages.info(request, 'Your password does not match.')
 
@@ -152,7 +157,7 @@ def addCompany(request):
                'comp_form': comp_form,
                'userData': userData,
                'compData': compData,
-               'title': 'Company'
+               'title': 'Companies'
                }
     return render(request, 'company.html', context)
 
@@ -162,7 +167,7 @@ def addCompany(request):
 def deleteUser(request, pk):
     uid = CustomUser.objects.get(id=pk)
     uid.delete()
-    return redirect('user/')    
+    return redirect('/')
 
 
 @login_required(login_url='/')

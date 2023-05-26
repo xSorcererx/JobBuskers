@@ -74,7 +74,7 @@ class Candidate(models.Model):
     gender = models.CharField('Gender', max_length=8,
                               choices=gender_selection, default='Male', null=False)
     preference = models.CharField('Preference', max_length=200,
-                                  choices=pref_selection, default='Other', null=False)
+                                  choices=pref_selection, default='IT & Telecommunication', null=False)
 
     def __str__(self):
         return self.user.name
