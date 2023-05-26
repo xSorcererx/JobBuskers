@@ -477,7 +477,7 @@ class Notification(APIView):
 class RecommendJobs(APIView):
     def get(self, request):
         try:
-            userInstance = CustomUser.objects.get(id=request.data['user'])     
+            userInstance = CustomUser.objects.get(id=request.query_params.get('user'))     
             rec_option = Recommendation.objects.get(user=userInstance)
             rec_jobs = Jobs.objects.filter(title=rec_option.job)
             rec_jobs_serializer = JobsSerializer(rec_jobs[:5], many=True)
@@ -496,12 +496,15 @@ class RecommendJobs(APIView):
     def post(self, request):
         try:
             userInstance = CustomUser.objects.get(id=request.data['user'])
-            Recommendation.objects.create(
-                user = userInstance,
-                job=request.data['job'],
-                job_level=request.data['job_level'],
-            )
-            return Response({'message':'Posted'}, status=status.HTTP_200_OK)
+            if Recommendation.objects.get(user=userInstance):
+                Recommendation.objects.get(user=userInstance).delete()
+            else:                              
+                Recommendation.objects.create(
+                    user = userInstance,
+                    job=request.data['job'],
+                    job_level=request.data['job_level'],
+                )
+                return Response({'message':'Posted'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             return Response({'message': 'Recommendation not posted'}, status=status.HTTP_404_NOT_FOUND)
