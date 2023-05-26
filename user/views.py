@@ -496,14 +496,23 @@ class RecommendJobs(APIView):
     def post(self, request):
         try:
             userInstance = CustomUser.objects.get(id=request.data['user'])
-            if Recommendation.objects.get(user=userInstance):
-                Recommendation.objects.get(user=userInstance).delete()
-            else:                              
+            try:
+                rec = Recommendation.objects.get(user=userInstance)
+                rec.delete()
+                print('deleted')
                 Recommendation.objects.create(
                     user = userInstance,
                     job=request.data['job'],
                     job_level=request.data['job_level'],
                 )
+                print('created after')
+            except:                            
+                Recommendation.objects.create(
+                    user = userInstance,
+                    job=request.data['job'],
+                    job_level=request.data['job_level'],
+                )
+                print('created')
                 return Response({'message':'Posted'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
