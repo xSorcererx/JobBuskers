@@ -218,13 +218,13 @@ class ResetPassword(APIView):
 class UpdateDetails(APIView):
     def put(self, request):
         try:
-            user_detail = CustomUser.objects.get(
-                id=request.query_params.get('user'))
-            # print(user_detail)
+            print('edit')
+            user_detail = CustomUser.objects.get(id=request.query_params.get('user'))
+            print(user_detail.user_type)
+
             if request.data['display_picture'] is not None and request.data['display_picture'] != '':
                 user_detail.display_picture = request.data['display_picture']
 
-            print('name')
             if request.data['name'] is not None and request.data['name'] != '':
                 user_detail.name = request.data['name']
 
@@ -240,17 +240,21 @@ class UpdateDetails(APIView):
             if request.data['description'] is not None and request.data['description'] != '':
                 user_detail.description = request.data['description']
 
-            if user_detail.user_type == '2':
+            if user_detail.user_type == 2:
+                print('here')
                 company = Company.objects.get(user=user_detail.id)
+                print(company)
                 if request.data['website'] is not None and request.data['website'] != '':
-                    user_detail.website = request.data['website']
+                    company.website = request.data['website']
 
                 if request.data['est_year'] is not None and request.data['est_year'] != '':
-                    user_detail.est_year = request.data['est_year']
+                    company.est_year = request.data['est_year']
+                company.save()
 
             user_detail.save()
             return Response({"message": "User detail(s) updated!", }, status=status.HTTP_200_OK,)
-        except:
+        except Exception as e:
+            print(e)
             return Response({"message": "Error!", }, status=status.HTTP_400_BAD_REQUEST,)
 
     # def get(self, request, *args, **kwargs):
@@ -506,6 +510,7 @@ class RecommendJobs(APIView):
                     job_level=request.data['job_level'],
                 )
                 print('created after')
+                return Response({'message':'Posted'}, status=status.HTTP_200_OK)
             except:                            
                 Recommendation.objects.create(
                     user = userInstance,
@@ -540,7 +545,7 @@ class RecommendJobs(APIView):
 class RecommendCandidate(APIView):
     def get(self, request):
         try:
-            userInstance = CustomUser.objects.get(id=request.data['user'])
+            userInstance = CustomUser.objects.get(id=request.query_params.get('user'))
             company = Company.objects.get(user = userInstance)
             candidates = Candidate.objects.filter(preference = company.industry)
             serializer = CandidateSerializer(candidates[:5], many=True)

@@ -15,6 +15,10 @@ class Jobs(models.Model):
     status_selections = [('On-Site', 'On-Site'),
                     ('Remote', 'On-Site'),
                     ('Hybrid', 'Hybrid')]
+    
+    level_selections = [('Senior', 'Senior'),
+                    ('Mid-level', 'Mid-level'),
+                    ('Junior', 'Junior'),]
 
     title = models.CharField(max_length=250, null=False, blank=False)
     address = models.CharField(max_length=50, null=False,blank=False)
@@ -23,7 +27,8 @@ class Jobs(models.Model):
     job_type = models.CharField('Status', max_length=200,   
             choices=status_selections, default='On-Site', null=False)
     salary = models.CharField(max_length=20, default='Negotiable', null=False)
-    level = models.CharField(max_length=15, null=False, blank=False, default='Junior')
+    level = models.CharField('Level', max_length=200,   
+            choices=level_selections, default='Junior', null=False)
     status = models.BooleanField(default=True)
     company_id = models.ForeignKey(to=Company, on_delete=models.CASCADE)
 
